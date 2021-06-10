@@ -1,0 +1,12 @@
+name: 'Capture Failure Notification'
+description: 'Capture failures of job and send notification to webex'
+inputs:
+  repoName: 
+    description: 'The name of repository that triggers the action'
+    required: true
+    default: 'MR'    
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+  
+      
