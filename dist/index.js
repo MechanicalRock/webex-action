@@ -44,6 +44,8 @@ const handler = () => __awaiter(void 0, void 0, void 0, function* () {
         const repoName = core.getInput("repoName");
         const payload = github.context.payload;
         console.log(`The event payload: ${payload}`);
+        console.log(`This is github contex ${github.context} `);
+        console.log(`The event payload after being stringify: ${JSON.stringify(payload)} `);
         const commitUrl = JSON.stringify(payload.head_commit.url);
         const author = JSON.stringify(payload.head_commit.author.name);
         const commitMessage = JSON.stringify(payload.head_commit.message);
