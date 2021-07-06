@@ -7,10 +7,8 @@ const handler = async () => {
   try {
     const repoName = core.getInput("repoName");
     const payload = github.context.payload;
-    console.log(
-      `The event payload after being stringify: ${JSON.stringify(payload)} `
-    );
-
+    console.log(`The event payload : ${JSON.stringify(payload)} `);
+    console.log("pull request", JSON.stringify(payload.pull_request));
     const commitUrl = JSON.stringify(payload.pull_request?.html_url);
     const author = JSON.stringify(payload.pull_request?.user.login);
     const commitMessage2 = JSON.stringify(payload.pull_request?.head.label);

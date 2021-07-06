@@ -42,7 +42,8 @@ const handler = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const repoName = core.getInput("repoName");
         const payload = github.context.payload;
-        console.log(`The event payload after being stringify: ${JSON.stringify(payload)} `);
+        console.log(`The event payload : ${JSON.stringify(payload)} `);
+        console.log("pull request", JSON.stringify(payload.pull_request));
         const commitUrl = JSON.stringify((_a = payload.pull_request) === null || _a === void 0 ? void 0 : _a.html_url);
         const author = JSON.stringify((_b = payload.pull_request) === null || _b === void 0 ? void 0 : _b.user.login);
         const commitMessage2 = JSON.stringify((_c = payload.pull_request) === null || _c === void 0 ? void 0 : _c.head.label);
