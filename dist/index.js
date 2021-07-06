@@ -38,14 +38,16 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const github = __importStar(__nccwpck_require__(438));
 const handler = () => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c;
     try {
         const repoName = core.getInput("repoName");
         const payload = github.context.payload;
         console.log(`The event payload after being stringify: ${JSON.stringify(payload)} `);
-        const commitUrl = JSON.stringify(payload.html.href);
-        const author = JSON.stringify(payload.head_commit.author.name);
+        const commitUrl = JSON.stringify((_a = payload.pull_request) === null || _a === void 0 ? void 0 : _a.html_url);
+        const author = JSON.stringify((_b = payload.pull_request) === null || _b === void 0 ? void 0 : _b.user.login);
+        const commitMessage2 = JSON.stringify((_c = payload.pull_request) === null || _c === void 0 ? void 0 : _c.head.label);
         const commitMessage = JSON.stringify(payload.head_commit.message);
-        console.log(`Incoming payload `, commitUrl, author, commitMessage, repoName);
+        console.log(`Incoming payload `, commitUrl, author, commitMessage2, commitMessage, repoName);
         // await sendNotification({
         //   markdown: markGithubActionToMarkdown(
         //     commitUrl,

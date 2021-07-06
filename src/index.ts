@@ -11,13 +11,15 @@ const handler = async () => {
       `The event payload after being stringify: ${JSON.stringify(payload)} `
     );
 
-    const commitUrl = JSON.stringify(payload.html.href);
-    const author = JSON.stringify(payload.head_commit.author.name);
+    const commitUrl = JSON.stringify(payload.pull_request?.html_url);
+    const author = JSON.stringify(payload.pull_request?.user.login);
+    const commitMessage2 = JSON.stringify(payload.pull_request?.head.label);
     const commitMessage = JSON.stringify(payload.head_commit.message);
     console.log(
       `Incoming payload `,
       commitUrl,
       author,
+      commitMessage2,
       commitMessage,
       repoName
     );
