@@ -37,78 +37,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const github = __importStar(__nccwpck_require__(438));
-const mapGithubActionToMarkdown_1 = __nccwpck_require__(788);
-const webexAdapter_1 = __nccwpck_require__(426);
 const handler = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const repoName = core.getInput("repoName");
         const payload = github.context.payload;
-        console.log(`The event payload: ${payload}`);
-        console.log(`This is github contex ${github.context} `);
         console.log(`The event payload after being stringify: ${JSON.stringify(payload)} `);
-        const commitUrl = JSON.stringify(payload.head_commit.url);
+        const commitUrl = JSON.stringify(payload.html.href);
         const author = JSON.stringify(payload.head_commit.author.name);
         const commitMessage = JSON.stringify(payload.head_commit.message);
-        yield webexAdapter_1.sendNotification({
-            markdown: mapGithubActionToMarkdown_1.markGithubActionToMarkdown(commitUrl, author, repoName, commitMessage),
-            roomId: process.env.WEBEX_ROOM || "",
-            token: process.env.WEBEX_TOKEN || "",
-        });
+        console.log(`Incoming payload `, commitUrl, author, commitMessage, repoName);
+        // await sendNotification({
+        //   markdown: markGithubActionToMarkdown(
+        //     commitUrl,
+        //     author,
+        //     repoName,
+        //     commitMessage
+        //   ),
+        //   roomId: process.env.WEBEX_ROOM || "",
+        //   token: process.env.WEBEX_TOKEN || "",
+        // });
     }
     catch (error) {
         core.setFailed(error.message);
     }
 });
 handler();
-
-
-/***/ }),
-
-/***/ 788:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.markGithubActionToMarkdown = void 0;
-const markGithubActionToMarkdown = (commitUrl, author, repoName, commitMessage) => {
-    return `🚨: Build failed on ${repoName}- ${commitUrl} for ${commitMessage}. Last change by ${author} `;
-};
-exports.markGithubActionToMarkdown = markGithubActionToMarkdown;
-
-
-/***/ }),
-
-/***/ 426:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sendNotification = void 0;
-const node_fetch_1 = __importDefault(__nccwpck_require__(467));
-const sendNotification = ({ markdown, roomId, token, }) => node_fetch_1.default("https://webexapis.com/v1/messages", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-        roomId,
-        markdown,
-    }),
-})
-    .then((response) => {
-    if (!response.ok) {
-        throw new Error(response.statusText);
-    }
-    return response.json();
-})
-    .then(console.log);
-exports.sendNotification = sendNotification;
 
 
 /***/ }),
