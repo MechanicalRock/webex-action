@@ -22,27 +22,19 @@ const handler = async () => {
     } else {
       commitUrl = JSON.stringify(payload.repository?.html_url);
       author = "";
-      commitMessage = "From workflow_dispath trigger";
+      commitMessage = "It's from manual workflow_dispath trigger";
     }
 
-    console.log(
-      `Incoming payload `,
-      commitUrl,
-      author,
-
-      commitMessage,
-      repoName
-    );
-    // await sendNotification({
-    //   markdown: markGithubActionToMarkdown(
-    //     commitUrl,
-    //     author,
-    //     repoName,
-    //     commitMessage
-    //   ),
-    //   roomId: process.env.WEBEX_ROOM || "",
-    //   token: process.env.WEBEX_TOKEN || "",
-    // });
+    await sendNotification({
+      markdown: markGithubActionToMarkdown(
+        commitUrl,
+        author,
+        repoName,
+        commitMessage
+      ),
+      roomId: process.env.WEBEX_ROOM || "",
+      token: process.env.WEBEX_TOKEN || "",
+    });
   } catch (error) {
     core.setFailed(error.message);
   }
