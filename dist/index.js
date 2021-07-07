@@ -38,17 +38,30 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const github = __importStar(__nccwpck_require__(438));
 const handler = () => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
+    var _a, _b, _c, _d, _e, _f, _g, _h;
     try {
         const repoName = core.getInput("repoName");
         const payload = github.context.payload;
         console.log(`The event payload : ${JSON.stringify(payload)} `);
-        console.log("pull request", JSON.stringify(payload.pull_request));
-        const commitUrl = JSON.stringify((_a = payload.pull_request) === null || _a === void 0 ? void 0 : _a.html_url);
-        const author = JSON.stringify((_b = payload.pull_request) === null || _b === void 0 ? void 0 : _b.user.login);
-        const commitMessage2 = JSON.stringify((_c = payload.pull_request) === null || _c === void 0 ? void 0 : _c.head.label);
-        const commitMessage = JSON.stringify(payload.head_commit.message);
-        console.log(`Incoming payload `, commitUrl, author, commitMessage2, commitMessage, repoName);
+        let commitUrl;
+        let author;
+        let commitMessage;
+        if (payload.pull_request) {
+            commitUrl = JSON.stringify((_a = payload.pull_request) === null || _a === void 0 ? void 0 : _a.html_url);
+            author = JSON.stringify((_b = payload.pull_request) === null || _b === void 0 ? void 0 : _b.user.login);
+            commitMessage = JSON.stringify((_c = payload.pull_request) === null || _c === void 0 ? void 0 : _c.head.label);
+        }
+        else if (payload.head_commit) {
+            commitUrl = JSON.stringify((_d = payload.head_commit) === null || _d === void 0 ? void 0 : _d.url);
+            author = JSON.stringify((_f = (_e = payload.head_commit) === null || _e === void 0 ? void 0 : _e.author) === null || _f === void 0 ? void 0 : _f.name);
+            commitMessage = JSON.stringify((_g = payload.head_commit) === null || _g === void 0 ? void 0 : _g.message);
+        }
+        else {
+            commitUrl = JSON.stringify((_h = payload.repository) === null || _h === void 0 ? void 0 : _h.html_url);
+            author = "";
+            commitMessage = "From workflow_dispath trigger";
+        }
+        console.log(`Incoming payload `, commitUrl, author, commitMessage, repoName);
         // await sendNotification({
         //   markdown: markGithubActionToMarkdown(
         //     commitUrl,

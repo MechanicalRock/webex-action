@@ -8,16 +8,28 @@ const handler = async () => {
     const repoName = core.getInput("repoName");
     const payload = github.context.payload;
     console.log(`The event payload : ${JSON.stringify(payload)} `);
-    console.log("pull request", JSON.stringify(payload.pull_request));
-    const commitUrl = JSON.stringify(payload.pull_request?.html_url);
-    const author = JSON.stringify(payload.pull_request?.user.login);
-    const commitMessage2 = JSON.stringify(payload.pull_request?.head.label);
-    const commitMessage = JSON.stringify(payload.head_commit.message);
+    let commitUrl: string;
+    let author: string;
+    let commitMessage: string;
+    if (payload.pull_request) {
+      commitUrl = JSON.stringify(payload.pull_request?.html_url);
+      author = JSON.stringify(payload.pull_request?.user.login);
+      commitMessage = JSON.stringify(payload.pull_request?.head.label);
+    } else if (payload.head_commit) {
+      commitUrl = JSON.stringify(payload.head_commit?.url);
+      author = JSON.stringify(payload.head_commit?.author?.name);
+      commitMessage = JSON.stringify(payload.head_commit?.message);
+    } else {
+      commitUrl = JSON.stringify(payload.repository?.html_url);
+      author = "";
+      commitMessage = "From workflow_dispath trigger";
+    }
+
     console.log(
       `Incoming payload `,
       commitUrl,
       author,
-      commitMessage2,
+
       commitMessage,
       repoName
     );
